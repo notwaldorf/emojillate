@@ -1,0 +1,17 @@
+{
+  "name": "emojillate",
+  "version": "0.0.1",
+  "description": "A thing that turns something into something better",
+  "authors": [
+    "Monica Dinculescu"
+  ],
+  "private": true,
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "main": "index.html"
+}
