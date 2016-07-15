@@ -7,8 +7,8 @@
         display: block;
       }
     </style>
-
-    batman
+    <canvas id="canvas" width="400" height="400" hidden></canvas>
+    <img id="img">
   </template>
 
   <script>
@@ -16,9 +16,26 @@
       is: 'pixel-er',
 
       properties: {
-
+        file: {
+          type: Object,
+          observer: '_fileChanged'
+        }
       },
 
+      _fileChanged: function(file) {
+        console.log('loading', file);
+
+        if (!this._reader) {
+          this._reader = new FileReader();
+          this._reader.onload = this._loadFile.bind(this);
+        }
+        this._reader.readAsDataURL(file);
+      },
+
+      _loadFile: function(event) {
+        this.$.img.src = event.target.result;
+        //filename.innerHTML = e.target.files[0].name;
+      }
     });
   </script>
 </dom-module>

@@ -11,6 +11,14 @@
   <link rel="import" href="elements/pixel-er.html">
 </head>
 <body>
-  <pixel-er></pixel-er>
+  <template is="dom-bind" id="t">
+    <input type="file" on-change="munge">
+    <pixel-er id="pixeler"></pixel-er>
+  </template>
 </body>
+<script>
+  t.munge = function(e) {
+    pixeler.file = e.target.files[0];
+  }
+</script>
 </html>
