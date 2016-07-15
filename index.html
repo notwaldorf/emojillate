@@ -13,7 +13,9 @@
 <body>
   <template is="dom-bind" id="t">
     <input type="file" on-change="munge">
-    <pixel-er id="pixeler"></pixel-er>
+    <pixel-er id="pixeler">
+      <div class="output"></div>
+    </pixel-er>
   </template>
 </body>
 <script>

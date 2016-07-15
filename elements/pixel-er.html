@@ -6,9 +6,24 @@
       :host {
         display: block;
       }
+
+      :host ::content .output {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+        font-size: 0px;
+        margin: 20px auto;
+      }
     </style>
-    <canvas id="canvas" width="400" height="400"></canvas>
-    <img id="image" on-load="_onImageLoaded">
+
+    <canvas id="canvas" width="400" height="400" hidden></canvas>
+    <img id="image" on-load="_onImageLoaded" hidden>
+    <content id="content" select=".output"></content>
   </template>
 
   <script>
@@ -31,6 +46,12 @@
 
       attached: function() {
         this._ctx = this.$.canvas.getContext('2d');
+
+        // From https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled
+        this._ctx.mozImageSmoothingEnabled = false;
+        this._ctx.msImageSmoothingEnabled = false;
+        this._ctx.imageSmoothingEnabled = false;
+
         this.$.canvas.width = canvasWidth;
       },
 
@@ -65,6 +86,26 @@
           return;
         }
 
+        var imageData = this._getPixellatedImageData(pixelsPerWidth, pixelsPerHeight);
+        var colors = this._getPixelColors(imageData, pixelsPerWidth, pixelsPerHeight);
+
+        // I don't love this.
+        var container = Polymer.dom(this.$.content).getDistributedNodes()[0];
+
+        // Remove the previous render and redisplay the new image.
+        container.innerHTML = '';
+        container.style.width = this.$.canvas.width +'px';
+        container.style.height = this.$.canvas.height +'px';
+
+        var fragment = document.createDocumentFragment();
+        for (var i = 0; i < colors.length; i++) {
+          var pixel = this._drawPixel(colors[i], canvas.width / pixelsPerWidth, canvas.height / pixelsPerHeight);
+          fragment.appendChild(pixel);
+        }
+        container.appendChild(fragment);
+      },
+
+      _getPixellatedImageData: function(pixelsPerWidth, pixelsPerHeight) {
         // Draw the image super tiny and then scale it from the tiny size
         // to the actual canvas size, which pixellates it.
         this._ctx.drawImage(this.$.image, 0, 0, pixelsPerWidth, pixelsPerHeight);
@@ -72,7 +113,41 @@
                      0, 0, pixelsPerWidth, pixelsPerHeight,          /* source */
                      0, 0, this.$.canvas.width, this.$.canvas.height /* dest */);
 
-        var imageData = this._ctx.getImageData(0, 0, this.$.canvas.width, this.$.canvas.height);
+        return this._ctx.getImageData(0, 0, this.$.canvas.width, this.$.canvas.height);
+      },
+
+      _getPixelColors: function(imageData, pixelsPerWidth, pixelsPerHeight) {
+        function getRGBA(data) {
+          return 'rgba(' + data[0] + ',' + data[1] +
+                  ',' + data[2] + ',' + data[3] + ')';
+        }
+
+        var colors = [];
+        var widthRatio = canvas.width / pixelsPerWidth;
+        var heightRatio = canvas.height / pixelsPerHeight;
+
+        // How many original pixels we have in a "drawn" final pixel.
+        for (var i = 0; i < pixelsPerWidth; i++) {
+          for (var j = 0; j < pixelsPerHeight; j++) {
+            var x = Math.round(widthRatio * i + 1) * 4;
+            var y = Math.round(heightRatio * j + 1) * canvas.width * 4;
+
+            var pixel = [imageData.data[y + x], imageData.data[y + x + 1], imageData.data[y + x + 2], imageData.data[y + x + 3]];
+            var rgba = getRGBA(pixel);
+
+            colors.push(rgba);
+          }
+        }
+        return colors;
+      },
+
+      _drawPixel: function(rgba, size) {
+        var pixel = document.createElement('div');
+        pixel.className = 'pixel';
+        pixel.style.width = pixel.style.height = size + 'px';
+
+        pixel.style.backgroundColor = rgba;
+        return pixel;
       }
 
     });
