@@ -7,11 +7,13 @@
         display: block;
       }
     </style>
-    <canvas id="canvas" width="400" height="400" hidden></canvas>
-    <img id="img">
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <img id="image" on-load="_onImageLoaded">
   </template>
 
   <script>
+    var canvasWidth = 400;
+
     Polymer({
       is: 'pixel-er',
 
@@ -19,12 +21,20 @@
         file: {
           type: Object,
           observer: '_fileChanged'
+        },
+
+        resolution: {
+          type: Number,
+          value: 50
         }
       },
 
-      _fileChanged: function(file) {
-        console.log('loading', file);
+      attached: function() {
+        this._ctx = this.$.canvas.getContext('2d');
+        this.$.canvas.width = canvasWidth;
+      },
 
+      _fileChanged: function(file) {
         if (!this._reader) {
           this._reader = new FileReader();
           this._reader.onload = this._loadFile.bind(this);
@@ -33,9 +43,38 @@
       },
 
       _loadFile: function(event) {
-        this.$.img.src = event.target.result;
+        this.$.image.src = event.target.result;
         //filename.innerHTML = e.target.files[0].name;
+      },
+
+      _onImageLoaded: function(event) {
+        var imageRatio = this.$.image.height / this.$.image.width;
+
+        var pixelsPerWidth = this.resolution;
+        var pixelsPerHeight = Math.floor(pixelsPerWidth * imageRatio);
+
+        // Adjust the canvas to fit the shape of the image.
+        this.$.canvas.height = Math.ceil(canvasWidth * imageRatio);
+
+        this._displayPixelatedImage(pixelsPerWidth, pixelsPerHeight);
+      },
+
+      _displayPixelatedImage: function(pixelsPerWidth, pixelsPerHeight) {
+        // Oopsies?
+        if (!this.$.canvas.width || !this.$.canvas.height) {
+          return;
+        }
+
+        // Draw the image super tiny and then scale it from the tiny size
+        // to the actual canvas size, which pixellates it.
+        this._ctx.drawImage(this.$.image, 0, 0, pixelsPerWidth, pixelsPerHeight);
+        this._ctx.drawImage(this.$.canvas,
+                     0, 0, pixelsPerWidth, pixelsPerHeight,          /* source */
+                     0, 0, this.$.canvas.width, this.$.canvas.height /* dest */);
+
+        var imageData = this._ctx.getImageData(0, 0, this.$.canvas.width, this.$.canvas.height);
       }
+
     });
   </script>
 </dom-module>
