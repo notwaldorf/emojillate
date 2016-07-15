@@ -21,8 +21,6 @@
   </template>
 
   <script>
-    var canvasWidth = 600;
-
     Polymer({
       is: 'pixel-er',
 
@@ -45,8 +43,6 @@
         this._ctx.mozImageSmoothingEnabled = false;
         this._ctx.msImageSmoothingEnabled = false;
         this._ctx.imageSmoothingEnabled = false;
-
-        this.$.canvas.width = canvasWidth;
       },
 
       _fileChanged: function(file) {
@@ -68,7 +64,8 @@
         var pixelsPerHeight = Math.floor(pixelsPerWidth * imageRatio);
 
         // Adjust the canvas to fit the shape of the image.
-        this.$.canvas.height = Math.ceil(canvasWidth * imageRatio);
+        this.$.canvas.width = window.innerWidth > 600 ? 600 : window.innerWidth - 40;
+        this.$.canvas.height = Math.ceil(this.$.canvas.width * imageRatio);
 
         this._displayPixelatedImage(pixelsPerWidth, pixelsPerHeight);
       },
