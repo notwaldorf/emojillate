@@ -8,8 +8,6 @@
       }
 
       :host ::content .output {
-        font-size: 10px;
-        line-height: 10px;
         margin: 20px auto;
         word-wrap: break-word;
       }
@@ -23,7 +21,7 @@
   </template>
 
   <script>
-    var canvasWidth = 400;
+    var canvasWidth = 600;
 
     Polymer({
       is: 'pixel-er',
@@ -50,7 +48,8 @@
 
         this.$.canvas.width = canvasWidth;
 
-        this._palette = ['🍋', '🍑', '🍎', '💎', '🐢', '🙊', '🐐'];
+        //this._palette = ['🍋', '🍑', '🍎', '💎', '🐢', '🙊', '🐐', '🍩'];
+        this._emojiColorMap = {'ff0000': '🍎', 'ffff00': '🍋', '000000': '🍩', 'ffffff': '🐐'};
       },
 
       _fileChanged: function(file) {
@@ -151,13 +150,44 @@
       },
 
       _drawPixel: function(rgba, size) {
-        var pixel = document.createElement('div');
+        var pixel = document.createElement('span');
         pixel.className = 'pixel';
         pixel.style.display = 'inline-block';
         pixel.style.width = pixel.style.height = size + 'px';
-        pixel.textContent = 'a';
+        pixel.style.fontSize = size - 2 + 'px';
         pixel.style.backgroundColor = rgba;
+        pixel.textContent = this._getClosestEmoji(rgba);
         return pixel;
+      },
+
+      _getClosestEmoji: function(rgba) {
+        var split = rgba.replace('rgba(', '').replace(')', '').split(',');
+        var minDistance = 10000000;
+        var minKey = null;
+
+        for (var emoji in this._emojiColorMap) {
+          var rgb = this._hexToRgb(emoji);
+
+          var distance =
+              3 * Math.abs(rgb.r - split[0]) +
+              4 * Math.abs(rgb.g - split[1]) +
+              3 * Math.abs(rgb.b - split[2]);
+          if (distance < minDistance) {
+            minDistance = distance;
+            minKey = emoji;
+          }
+        }
+
+        return this._emojiColorMap[minKey];
+      },
+
+      _hexToRgb: function(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
       }
 
     });
