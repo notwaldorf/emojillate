@@ -102,7 +102,14 @@
 
         for (var i = 0; i < colors.length; i++) {
           var pixel = this._drawPixel(colors[i], pixelWidth, pixelHeight);
+
           fragment.appendChild(pixel);
+
+          // Add a <br> at the end of every row so that we can copy paste this
+          // as a grid.
+          if (i % pixelsPerWidth === (pixelsPerWidth - 1)) {
+            fragment.appendChild(document.createElement('br'));
+          }
         }
         container.appendChild(fragment);
       },
