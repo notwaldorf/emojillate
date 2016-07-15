@@ -8,22 +8,18 @@
       }
 
       :host ::content .output {
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-flex-direction: column;
-        flex-direction: column;
-        -ms-flex-wrap: wrap;
-        -webkit-flex-wrap: wrap;
-        flex-wrap: wrap;
-        font-size: 0px;
+        font-size: 10px;
+        line-height: 10px;
         margin: 20px auto;
+        word-wrap: break-word;
       }
     </style>
 
     <canvas id="canvas" width="400" height="400" hidden></canvas>
     <img id="image" on-load="_onImageLoaded" hidden>
     <content id="content" select=".output"></content>
+
+    <canvas id="palette">
   </template>
 
   <script>
@@ -53,6 +49,8 @@
         this._ctx.imageSmoothingEnabled = false;
 
         this.$.canvas.width = canvasWidth;
+
+        this._palette = ['🍋', '🍑', '🍎', '💎', '🐢', '🙊', '🐐'];
       },
 
       _fileChanged: function(file) {
@@ -98,8 +96,12 @@
         container.style.height = this.$.canvas.height +'px';
 
         var fragment = document.createDocumentFragment();
+
+        var pixelWidth = this.$.canvas.width / pixelsPerWidth;
+        var pixelHeight = this.$.canvas.height / pixelsPerHeight
+
         for (var i = 0; i < colors.length; i++) {
-          var pixel = this._drawPixel(colors[i], canvas.width / pixelsPerWidth, canvas.height / pixelsPerHeight);
+          var pixel = this._drawPixel(colors[i], pixelWidth, pixelHeight);
           fragment.appendChild(pixel);
         }
         container.appendChild(fragment);
@@ -127,8 +129,8 @@
         var heightRatio = canvas.height / pixelsPerHeight;
 
         // How many original pixels we have in a "drawn" final pixel.
-        for (var i = 0; i < pixelsPerWidth; i++) {
-          for (var j = 0; j < pixelsPerHeight; j++) {
+        for (var j = 0; j < pixelsPerHeight; j++) {
+          for (var i = 0; i < pixelsPerWidth; i++) {
             var x = Math.round(widthRatio * i + 1) * 4;
             var y = Math.round(heightRatio * j + 1) * canvas.width * 4;
 
@@ -144,8 +146,9 @@
       _drawPixel: function(rgba, size) {
         var pixel = document.createElement('div');
         pixel.className = 'pixel';
+        pixel.style.display = 'inline-block';
         pixel.style.width = pixel.style.height = size + 'px';
-
+        pixel.textContent = 'a';
         pixel.style.backgroundColor = rgba;
         return pixel;
       }
