@@ -5,11 +5,10 @@
   <template strip-whitespace>
     <style>
       :host {
-        display: block;
+        display: inline-block;
       }
 
       :host ::content .output {
-        margin: 20px auto;
         word-wrap: break-word;
       }
     </style>
@@ -60,7 +59,6 @@
 
       _loadFile: function(event) {
         this.$.image.src = event.target.result;
-        //filename.innerHTML = e.target.files[0].name;
       },
 
       _onImageLoaded: function(event) {

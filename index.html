@@ -7,20 +7,105 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
+  <link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="elements/pixel-er.html">
+
+  <style>
+    body {
+      font-family: 'Lato', 'Helvetica', sans-serif;
+      color: #01beb4;
+      background: #fee8ef;
+      background: linear-gradient(to right bottom, #fee8ef 50%, #b6cdfd 50%);
+      height: 100vh;
+      margin: 0;
+    }
+
+    .wrapper {
+      width: 600px;
+      padding: 40px 0;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    label {
+      display: inline-block;
+      padding: 0 10px;
+      margin-right: 10px;
+      cursor: pointer;
+      font-size: 1em;
+      line-height: 2;
+      text-transform: uppercase;
+      text-align: center;
+      font-weight: 700;
+      background: white;
+      color: #01beb4;
+      border: 3px solid #01beb4;
+      border-radius: 6px;
+      width: 200px;
+    }
+
+    label:hover, label:focus {
+      outline: none;
+      background: #bdf0f1;
+    }
+
+    input {
+      width: 0;
+      height: 0;
+      opacity: 0;
+      cursor: pointer;
+      display: none;
+    }
+
+    a, a:visited {
+      color: #ff8602;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      border-top: 3px solid #01beb4;
+      margin: 30px 0;
+      padding: 10px 0;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    .output {
+      min-height: 300px;
+    }
+  </style>
 </head>
 <body>
-  <template is="dom-bind" id="t">
-    <input type="file" on-change="munge">
-    <pixel-er id="pixeler">
-      <div class="output"></div>
-    </pixel-er>
-  </template>
+  <div class="wrapper">
+    <h1>~~pixellate~~</h1>
+
+    <template is="dom-bind" id="t">
+      <div class="file">
+        <label for="loader">Upload an image</label>
+        <span id="filename"></span>
+        <input type="file" id="loader" on-change="munge">
+      </div>
+      <br><br>
+      <pixel-er id="pixeler">
+        <div class="output"></div>
+      </pixel-er>
+    </template>
+
+    <footer>
+      <p>made with <span style="color:#23C8B9">❤︎</span> by <a href="https://twitter.com/notwaldorf">monica</a>.
+        find this on <a href="https://github.com/notwaldorf/sparkle">github</a></p>
+    </footer>
+  </div>
 </body>
 <script>
   t.munge = function(e) {
     pixeler.file = e.target.files[0];
+    filename.innerHTML = e.target.files[0].name;
   }
 </script>
 </html>
