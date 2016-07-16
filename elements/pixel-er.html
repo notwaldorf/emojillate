@@ -183,6 +183,7 @@
         for (var color in window.emojiColorMap) {
           var rgb = color.split(',');
 
+          // This is a bit of a lie. Try to convert to Lab, where distances have meanings.
           var distance =
               3 * Math.abs(rgb[0] - split[0]) +
               4 * Math.abs(rgb[1] - split[1]) +
