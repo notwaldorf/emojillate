@@ -11,6 +11,7 @@
     "polymer": "Polymer/polymer#^1.1.0",
     "iron-iconset-svg": "polymerelements/iron-iconset-svg#^1.0.0",
     "paper-icon-button": "polymerelements/paper-icon-button#^1.0.0",
+    "paper-checkbox": "polymerelements/paper-checkbox#^1.0.0",
     "paper-slider": "polymerelements/paper-slider#^1.0.0"
   },
   "devDependencies": {
