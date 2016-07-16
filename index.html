@@ -12,6 +12,7 @@
   <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
   <link rel="import" href="bower_components/paper-slider/paper-slider.html">
   <link rel="import" href="elements/pixel-er.html">
+  <link rel="import" href="elements/icons.html">
 
   <style>
     body {
@@ -99,6 +100,12 @@
       --paper-slider-active-color: #01beb4;
       --paper-slider-pin-color: #01beb4;
     }
+    paper-icon-button {
+      border-radius: 50%;
+    }
+    paper-icon-button:hover {
+      background: #bdf0f1;
+    }
   </style>
 </head>
 <body>
@@ -108,11 +115,13 @@
     <template is="dom-bind" id="t">
       <div class="file">
         <label for="loader" class="button">Upload an image</label>
+        <paper-icon-button id="copyButton"
+            icon="icons:copy" on-click="copyToClipboard"
+            title="copy to clipboard" hidden></paper-icon-button>
         <span id="filename"></span>
         <input type="file" id="loader" on-change="munge">
       </div>
       <div><span class="slider-label">resolution</span><paper-slider value="{{_value}}" pin snaps step=5 max=80></paper-slider></div>
-      <button class="button" on-click="copyToClipboard">copy to clipboard</button>
       <br><br>
 
       <pixel-er id="pixeler" resolution="{{_value}}">
@@ -129,6 +138,7 @@
 <script>
   t._value = 60;
   t.munge = function(e) {
+    copyButton.hidden = false;
     pixeler.file = e.target.files[0];
     filename.innerHTML = e.target.files[0].name;
   }
@@ -144,10 +154,18 @@
     try {
       result = document.execCommand('copy');
       console.log('done');
+      copyButton.icon = 'icons:done';
     } catch (err) {
       // Copy command is not available
       console.error(err);
+      copyButton.icon = 'icons:error';
     }
+
+    // Return to the copy button after a second.
+    setTimeout(function() {
+      copyButton.icon = 'copy';
+    }.bind(this), 1000);
+
     selection.removeAllRanges();
     return result;
   }
