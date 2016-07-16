@@ -29,11 +29,13 @@
       text-align: center;
     }
 
-    label {
+    .button {
+      box-sizing: border-box;
       display: inline-block;
       padding: 0 10px;
-      margin-right: 10px;
+      margin: 0 10px 0 0;
       cursor: pointer;
+      font-family: inherit;
       font-size: 1em;
       line-height: 2;
       text-transform: uppercase;
@@ -44,9 +46,10 @@
       border: 3px solid #01beb4;
       border-radius: 6px;
       width: 200px;
+      outline: none;
     }
 
-    label:hover, label:focus {
+    .button:hover, .button:focus {
       outline: none;
       background: #bdf0f1;
     }
@@ -103,12 +106,12 @@
 
     <template is="dom-bind" id="t">
       <div class="file">
-        <label for="loader">Upload an image</label>
+        <label for="loader" class="button">Upload an image</label>
         <span id="filename"></span>
         <input type="file" id="loader" on-change="munge">
       </div>
       <div><span class="slider-label">resolution</span><paper-slider value="{{_value}}" pin snaps step=5 max=80></paper-slider></div>
-
+      <button class="button" on-click="copyToClipboard">copy to clipboard</button>
       <br><br>
 
       <pixel-er id="pixeler" resolution="{{_value}}">
@@ -127,6 +130,25 @@
   t.munge = function(e) {
     pixeler.file = e.target.files[0];
     filename.innerHTML = e.target.files[0].name;
+  }
+
+  t.copyToClipboard = function() {
+    // From https://github.com/google/material-design-lite/blob/master/docs/_assets/snippets.js
+    var snipRange = document.createRange();
+    snipRange.selectNodeContents(document.querySelector('.output'));
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(snipRange);
+    var result = false;
+    try {
+      result = document.execCommand('copy');
+      console.log('done');
+    } catch (err) {
+      // Copy command is not available
+      console.error(err);
+    }
+    selection.removeAllRanges();
+    return result;
   }
 </script>
 </html>
