@@ -31,7 +31,8 @@
         },
 
         resolution: {
-          type: Number
+          type: Number,
+          observer: '_resolutionChanged'
         }
       },
 
@@ -52,11 +53,15 @@
         this._reader.readAsDataURL(file);
       },
 
+      _resolutionChanged: function() {
+        this._onImageLoaded();
+      },
+
       _loadFile: function(event) {
         this.$.image.src = event.target.result;
       },
 
-      _onImageLoaded: function(event) {
+      _onImageLoaded: function() {
         var imageRatio = this.$.image.height / this.$.image.width;
 
         var pixelsPerWidth = this.resolution;
