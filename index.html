@@ -9,6 +9,7 @@
 
   <link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="bower_components/paper-slider/paper-slider.html">
   <link rel="import" href="elements/pixel-er.html">
 
   <style>
@@ -59,7 +60,7 @@
     }
 
     a, a:visited {
-      color: #ff8602;
+      color: white;
       text-decoration: none;
     }
 
@@ -78,6 +79,15 @@
     .output {
       min-height: 300px;
     }
+
+    .slider-label {
+      line-height: 35px;
+      vertical-align: middle;
+    }
+    paper-slider {
+      display: inline-block !important;
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
@@ -90,8 +100,11 @@
         <span id="filename"></span>
         <input type="file" id="loader" on-change="munge">
       </div>
+      <div><span class="slider-label">resolution</span><paper-slider value="{{_value}}" pin snaps step=5 max=80></paper-slider></div>
+
       <br><br>
-      <pixel-er id="pixeler">
+
+      <pixel-er id="pixeler" resolution="{{_value}}">
         <div class="output"></div>
       </pixel-er>
     </template>
@@ -103,6 +116,7 @@
   </div>
 </body>
 <script>
+  t._value = 60;
   t.munge = function(e) {
     pixeler.file = e.target.files[0];
     filename.innerHTML = e.target.files[0].name;
