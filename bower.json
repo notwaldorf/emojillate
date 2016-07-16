@@ -9,7 +9,9 @@
   "license": "http://polymer.github.io/LICENSE.txt",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.1.0",
-    "paper-slider": "polymerelements/paper-slider#^1.0.0"  
+    "iron-iconset-svg": "polymerelements/iron-iconset-svg#^1.0.0",
+    "paper-icon-button": "polymerelements/paper-icon-button#^1.0.0",
+    "paper-slider": "polymerelements/paper-slider#^1.0.0"
   },
   "devDependencies": {
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
