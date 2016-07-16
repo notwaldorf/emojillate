@@ -11,6 +11,10 @@
       :host ::content .output {
         word-wrap: break-word;
       }
+
+      .no-background {
+        background: white !important;
+      }
     </style>
 
     <canvas id="canvas" width="400" height="400" hidden></canvas>
@@ -33,6 +37,12 @@
         resolution: {
           type: Number,
           observer: '_resolutionChanged'
+        },
+
+        noBackground: {
+          type:Boolean,
+          value: false,
+          observer: '_noBackgroundChanged'
         }
       },
 
@@ -55,6 +65,14 @@
 
       _resolutionChanged: function() {
         this._onImageLoaded();
+      },
+
+      _noBackgroundChanged: function(noBackground) {
+        var container = Polymer.dom(this.$.content).getDistributedNodes()[0];
+        var pixels = container.querySelectorAll('.pixel');
+        for (var i = 0; i < pixels.length; i++) {
+          this.toggleClass('no-background', noBackground, pixels[i]);
+        }
       },
 
       _loadFile: function(event) {

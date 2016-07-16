@@ -9,6 +9,7 @@
 
   <link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
   <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
   <link rel="import" href="bower_components/paper-slider/paper-slider.html">
   <link rel="import" href="elements/pixel-er.html">
@@ -17,6 +18,7 @@
   <style>
     body {
       font-family: 'Lato', 'Helvetica', sans-serif;
+      -webkit-font-smoothing: antialiased;
       color: #01beb4;
       background: #fee8ef;
       background: linear-gradient(to right bottom, #fee8ef 50%, #b6cdfd 50%);
@@ -65,12 +67,17 @@
     }
 
     a, a:visited {
-      color: white;
+      color: #01beb4;
       text-decoration: none;
+      border-bottom: 3px solid #fee8ef;
+      box-shadow: inset 0 -2px 0 #fee8ef;
+      color: inherit;
+      -webkit-transition: background .15s cubic-bezier(.33,.66,.66,1);
+      transition: background .15s cubic-bezier(.33,.66,.66,1);
     }
 
     a:hover {
-      text-decoration: underline;
+      background: #fee8ef;
     }
 
     footer {
@@ -99,6 +106,17 @@
       --paper-slider-knob-color: #01beb4;
       --paper-slider-active-color: #01beb4;
       --paper-slider-pin-color: #01beb4;
+      width: 40%;
+      margin-right: 30px;
+    }
+    paper-checkbox {
+      --paper-checkbox-checked-color: #01beb4;
+      --paper-checkbox-checked-ink-color: #01beb4;
+      --paper-checkbox-unchecked-color: #01beb4;
+      --paper-checkbox-unchecked-ink-color: #01beb4;
+      --paper-checkbox-label-color: #01beb4;
+      font-family: 'Lato', 'Helvetica', sans-serif;
+      font-weight: 400;
     }
     paper-icon-button {
       border-radius: 50%;
@@ -121,22 +139,28 @@
         <span id="filename"></span>
         <input type="file" id="loader" on-change="munge">
       </div>
-      <div><span class="slider-label">resolution</span><paper-slider value="{{_value}}" pin snaps step=5 min=5 max=80></paper-slider></div>
+      <div>
+        <span class="slider-label">resolution</span>
+        <paper-slider value="{{_value}}" pin snaps step=5 min=5 max=80></paper-slider>
+        <paper-checkbox checked="{{_noBackground}}">hide background</paper-checkbox>
+      </div>
       <br><br>
 
-      <pixel-er id="pixeler" resolution="{{_value}}">
+      <pixel-er id="pixeler" resolution="{{_value}}" no-background="{{_noBackground}}">
         <div class="output"></div>
       </pixel-er>
     </template>
 
     <footer>
       <p>made with <span style="color:#23C8B9">❤︎</span> by <a href="https://twitter.com/notwaldorf">monica</a>.
-        find this on <a href="https://github.com/notwaldorf/sparkle">github</a></p>
+        find this on <a href="https://github.com/notwaldorf/emojillate">github</a></p>
     </footer>
   </div>
 </body>
 <script>
   t._value = 60;
+  t._noBackground = false;
+
   t.munge = function(e) {
     copyButton.hidden = false;
     pixeler.file = e.target.files[0];
