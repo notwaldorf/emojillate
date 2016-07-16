@@ -110,7 +110,7 @@
 </head>
 <body>
   <div class="wrapper">
-    <h1>~~pixellate~~</h1>
+    <h1>~~emojillate~~</h1>
 
     <template is="dom-bind" id="t">
       <div class="file">
@@ -121,7 +121,7 @@
         <span id="filename"></span>
         <input type="file" id="loader" on-change="munge">
       </div>
-      <div><span class="slider-label">resolution</span><paper-slider value="{{_value}}" pin snaps step=5 max=80></paper-slider></div>
+      <div><span class="slider-label">resolution</span><paper-slider value="{{_value}}" pin snaps step=5 min=5 max=80></paper-slider></div>
       <br><br>
 
       <pixel-er id="pixeler" resolution="{{_value}}">
