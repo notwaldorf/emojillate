@@ -9,7 +9,6 @@
       }
 
       :host ::content .output {
-        background: white;
         word-wrap: break-word;
       }
     </style>
@@ -153,7 +152,7 @@
         pixel.style.display = 'inline-block';
         pixel.style.width = pixel.style.height = size + 'px';
         pixel.style.fontSize = size - 2 + 'px';
-        //pixel.style.backgroundColor = rgba;
+        pixel.style.backgroundColor = rgba;
         pixel.textContent = this._getClosestEmoji(rgba);
         return pixel;
       },
