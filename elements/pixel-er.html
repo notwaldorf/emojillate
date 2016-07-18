@@ -171,6 +171,7 @@
         pixel.style.width = pixel.style.height = size + 'px';
         pixel.style.fontSize = size - 2 + 'px';
         pixel.style.backgroundColor = rgba;
+        this.toggleClass('no-background', this.noBackground, pixel);
         pixel.textContent = this._getClosestEmoji(rgba);
         return pixel;
       },
