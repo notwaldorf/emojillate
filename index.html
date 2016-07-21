@@ -194,7 +194,7 @@
     // Return to the copy button after a second.
     setTimeout(function() {
       copyButton.icon = 'icons:copy';
-    }.bind(this), 1000);
+    }, 1000);
 
     selection.removeAllRanges();
     return result;
@@ -202,12 +202,32 @@
 
   t.uploadGist = function() {
     console.log('upload gist');
-    uploadButton.icon = 'icons:done';
+
+    var xhr = new XMLHttpRequest();
+
+    var request = {'description': 'test', 'public': 'true',
+                   'files': {"file1.txt": {"content": "String file contents"}
+                 }};
+
+    xhr.open('POST', 'https://api.github.com/gists', true);
+    xhr.send(JSON.stringify(request));
+
+    xhr.addEventListener("readystatechange", function(e) {
+      if (this.readyState === 4 && this.status >= 200 && this.status < 300) {
+        var response = JSON.parse(xhr.responseText);
+        var url = response.html_url;
+        console.log(url);
+        uploadButton.icon = 'icons:done';
+      } else if (this.readyState === 4 && this.status >= 400) {
+        console.log('Oops', xhr.responseText);
+        uploadButton.icon = 'icons:error';
+      }
+    }, false);
 
     // Return to the copy button after a second.
     setTimeout(function() {
       uploadButton.icon = 'custom:github';
-    }.bind(this), 1000);
+    }, 1000);
   }
 
 </script>
