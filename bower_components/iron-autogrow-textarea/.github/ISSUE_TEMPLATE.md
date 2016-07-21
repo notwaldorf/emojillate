@@ -1,4 +1,4 @@
-<!-- Instructions: https://github.com/PolymerElements/paper-icon-button/CONTRIBUTING.md#filing-issues -->
+<!-- Instructions: https://github.com/PolymerElements/iron-autogrow-textarea/CONTRIBUTING.md#filing-issues -->
 ### Description
 <!-- Example: The `paper-foo` element causes the page to turn pink when clicked. -->
 
