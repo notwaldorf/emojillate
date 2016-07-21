@@ -178,6 +178,7 @@
   t.munge = function(e) {
     actions.hidden = false;
     pixeler.file = e.target.files[0];
+    result.textContent = result.href = '';
     //filename.innerHTML = e.target.files[0].name;
   }
 
@@ -209,6 +210,10 @@
   }
 
   t.uploadGist = function() {
+    var result = document.querySelector('.result');
+    result.textContent = 'Creating gist...';
+    result.href = '';
+
     var fileContents = document.querySelector('.output').innerText;
     var request = {'description': 'test', 'public': 'true',
                    'files': {'emojiemoji.txt': { 'content': fileContents}
@@ -217,8 +222,6 @@
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'https://api.github.com/gists', true);
     xhr.send(JSON.stringify(request));
-
-    var result = document.querySelector('.result');
 
     xhr.addEventListener("readystatechange", function(e) {
       if (this.readyState === 4 && this.status >= 200 && this.status < 300) {
