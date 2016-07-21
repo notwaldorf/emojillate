@@ -10,7 +10,7 @@
   <link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
-  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="bower_components/iron-icon/iron-icon.html">
   <link rel="import" href="bower_components/paper-slider/paper-slider.html">
   <link rel="import" href="elements/pixel-er.html">
   <link rel="import" href="elements/icons.html">
@@ -49,7 +49,6 @@
       color: #01beb4;
       border: 3px solid #01beb4;
       border-radius: 6px;
-      width: 200px;
       outline: none;
     }
 
@@ -132,11 +131,18 @@
 
     <template is="dom-bind" id="t">
       <div class="file">
-        <label for="loader" class="button">Upload an image</label>
-        <paper-icon-button id="copyButton"
-            icon="icons:copy" on-click="copyToClipboard"
-            title="copy to clipboard" hidden></paper-icon-button>
-        <span id="filename"></span>
+        <label for="loader" class="button">
+          <iron-icon icon="icons:upload"></iron-icon> Load image
+        </label>
+        <span id="actions" hidden>
+          <button class="button" on-click="copyToClipboard" title="copy to clipboard">
+            <iron-icon icon="icons:copy" id="copyButton"></iron-icon> Copy
+          </button>
+          <button class="button" on-click="uploadGist" title="upload gist">
+            <iron-icon icon="custom:github" id="uploadButton"></iron-icon> Create gist
+          </button>
+        </span>
+        <!-- <span id="filename"></span> -->
         <input type="file" id="loader" on-change="munge">
       </div>
       <div>
@@ -162,9 +168,9 @@
   t._noBackground = false;
 
   t.munge = function(e) {
-    copyButton.hidden = false;
+    actions.hidden = false;
     pixeler.file = e.target.files[0];
-    filename.innerHTML = e.target.files[0].name;
+    //filename.innerHTML = e.target.files[0].name;
   }
 
   t.copyToClipboard = function() {
@@ -187,11 +193,22 @@
 
     // Return to the copy button after a second.
     setTimeout(function() {
-      copyButton.icon = 'copy';
+      copyButton.icon = 'icons:copy';
     }.bind(this), 1000);
 
     selection.removeAllRanges();
     return result;
   }
+
+  t.uploadGist = function() {
+    console.log('upload gist');
+    uploadButton.icon = 'icons:done';
+
+    // Return to the copy button after a second.
+    setTimeout(function() {
+      uploadButton.icon = 'custom:github';
+    }.bind(this), 1000);
+  }
+
 </script>
 </html>
