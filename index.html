@@ -79,6 +79,13 @@
       background: #fee8ef;
     }
 
+    a.result:link, a.result:visited {
+      border-bottom: none;
+    }
+    a.result:hover {
+      text-decoration: underline;
+    }
+
     footer {
       border-top: 3px solid #01beb4;
       margin: 30px 0;
@@ -134,13 +141,14 @@
         <label for="loader" class="button">
           <iron-icon icon="icons:upload"></iron-icon> Load image
         </label>
-        <span id="actions" hidden>
+        <span id="actions">
           <button class="button" on-click="copyToClipboard" title="copy to clipboard">
             <iron-icon icon="icons:copy" id="copyButton"></iron-icon> Copy
           </button>
           <button class="button" on-click="uploadGist" title="upload gist">
             <iron-icon icon="custom:github" id="uploadButton"></iron-icon> Create gist
           </button>
+          <div><a class="result" href="" target="_blank"></a>&nbsp;</div>
         </span>
         <!-- <span id="filename"></span> -->
         <input type="file" id="loader" on-change="munge">
@@ -201,7 +209,7 @@
   }
 
   t.uploadGist = function() {
-    var fileContents = document.querySelector('.output').textContent;
+    var fileContents = document.querySelector('.output').innerText;
     var request = {'description': 'test', 'public': 'true',
                    'files': {'emojiemoji.txt': { 'content': fileContents}
                  }};
@@ -210,14 +218,16 @@
     xhr.open('POST', 'https://api.github.com/gists', true);
     xhr.send(JSON.stringify(request));
 
+    var result = document.querySelector('.result');
+
     xhr.addEventListener("readystatechange", function(e) {
       if (this.readyState === 4 && this.status >= 200 && this.status < 300) {
         var response = JSON.parse(xhr.responseText);
-        var url = response.html_url;
-        console.log(url);
+        result.textContent = result.href = response.html_url;
+
         uploadButton.icon = 'icons:done';
 
-        // Return to the copy button after a second.
+        // Return to the github icon after a second, and clear the result.
         setTimeout(function() {
           uploadButton.icon = 'custom:github';
         }, 1000);
@@ -226,8 +236,6 @@
         uploadButton.icon = 'icons:error';
       }
     }, false);
-
-
   }
 
 </script>
