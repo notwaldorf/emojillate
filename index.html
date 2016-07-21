@@ -218,16 +218,18 @@
         var url = response.html_url;
         console.log(url);
         uploadButton.icon = 'icons:done';
+
+        // Return to the copy button after a second.
+        setTimeout(function() {
+          uploadButton.icon = 'custom:github';
+        }, 1000);
       } else if (this.readyState === 4 && this.status >= 400) {
         console.log('Oops', xhr.responseText);
         uploadButton.icon = 'icons:error';
       }
     }, false);
 
-    // Return to the copy button after a second.
-    setTimeout(function() {
-      uploadButton.icon = 'custom:github';
-    }, 1000);
+
   }
 
 </script>
