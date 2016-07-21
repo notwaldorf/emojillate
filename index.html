@@ -201,14 +201,12 @@
   }
 
   t.uploadGist = function() {
-    console.log('upload gist');
-
-    var xhr = new XMLHttpRequest();
-
+    var fileContents = document.querySelector('.output').textContent;
     var request = {'description': 'test', 'public': 'true',
-                   'files': {"file1.txt": {"content": "String file contents"}
+                   'files': {'emojiemoji.txt': { 'content': fileContents}
                  }};
 
+    var xhr = new XMLHttpRequest();
     xhr.open('POST', 'https://api.github.com/gists', true);
     xhr.send(JSON.stringify(request));
 
