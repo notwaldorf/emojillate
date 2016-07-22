@@ -235,7 +235,8 @@
         var sortedEmoji = Object.keys(emojiMap).sort(function(a,b){return emojiMap[b]-emojiMap[a]});
 
         var s = '';
-        // Some images don't have 3 pixels, so do what you can.
+        // Some images don't have 3 pixels, so do what you can. Also ugh
+        // do this less awful when you're not on a bus, future monica.
         if (sortedEmoji[0])
           s += sortedEmoji[0];
 
