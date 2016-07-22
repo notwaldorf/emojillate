@@ -201,7 +201,14 @@
         return pixel;
       },
 
+      _closestEmoji: [],
+
       _getClosestEmoji: function(rgba) {
+        // this function is slooow, so we cache the results in hopes that we will be able to reuse them
+        if (this._closestEmoji[rgba]) {
+          return this._closestEmoji[rgba];
+        }
+
         var minDistance = 10000000;
         var emoji = null;
 
@@ -216,6 +223,8 @@
             emoji = item.emoji;
           }
         });
+
+        this._closestEmoji[rgba] = emoji;
 
         return emoji;
       },
