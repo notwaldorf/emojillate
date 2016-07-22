@@ -2,7 +2,7 @@
 
   Step 1. Load an image.
   
-  Step 2. Change every pixel to an emoji.
+  Step 2. Turn every pixel into an emoji.
   
   Step 3. ???
   
