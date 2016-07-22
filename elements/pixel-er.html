@@ -133,8 +133,10 @@
         var pixelHeight = this.$.canvas.height / pixelsPerHeight
 
         var pixelArrayForMode = [];
+        var modelPixel = this._createModelPixel(pixelWidth, pixelHeight);
+
         for (var i = 0; i < colors.length; i++) {
-          var pixel = this._drawPixel(colors[i], pixelWidth, pixelHeight);
+          var pixel = this._drawPixel(modelPixel.cloneNode(), colors[i]);
 
           fragment.appendChild(pixel);
           pixelArrayForMode.push(pixel.textContent);
@@ -180,14 +182,21 @@
         return colors;
       },
 
-      _drawPixel: function(rgba, size) {
+      _createModelPixel: function(size) {
         var pixel = document.createElement('span');
         pixel.className = 'pixel';
         pixel.style.display = 'inline-block';
         pixel.style.width = pixel.style.height = size + 'px';
         pixel.style.fontSize = size - 2 + 'px';
+        if(this.noBackground) {
+          pixel.classList.add('no-background');
+        }
+
+        return pixel;
+      },
+
+      _drawPixel: function(pixel, rgba) {
         pixel.style.backgroundColor = 'rgba(' + rgba[0] + ',' + rgba[1] + ',' + rgba[2] + ',' + rgba[3] + ')';
-        this.toggleClass('no-background', this.noBackground, pixel);
         pixel.textContent = this._getClosestEmoji(rgba);
         return pixel;
       },
