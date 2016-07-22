@@ -123,7 +123,9 @@
         var container = Polymer.dom(this.$.content).getDistributedNodes()[0];
 
         // Remove the previous render and redisplay the new image.
-        container.innerHTML = '';
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
         container.style.width = this.$.canvas.width +'px';
         container.style.height = this.$.canvas.height +'px';
 
