@@ -29,21 +29,39 @@
       is: 'pixel-er',
 
       properties: {
+        /*
+         * Image file to emojillate.
+         */
         file: {
           type: Object,
           observer: '_fileChanged'
         },
 
+        /*
+         * Resolution (i.e number of pixels per width of image) at which to emojillate.
+         */
         resolution: {
           type: Number,
           observer: '_resolutionChanged'
         },
 
+        /*
+         * Set this to true to hide the image background on the emojillated image.
+         */
         noBackground: {
-          type:Boolean,
+          type: Boolean,
           value: false,
           observer: '_noBackgroundChanged'
-        }
+        },
+
+        /*
+         * The one emoji representing the entire image. Obtained by calculating
+         * the average color of the entire original image, and finding the closest
+         * emoji to that.
+         */
+        tldr: {
+          type: String
+        },
       },
 
       attached: function() {
@@ -100,6 +118,7 @@
 
         var imageData = this._getPixellatedImageData(pixelsPerWidth, pixelsPerHeight);
         var colors = this._getPixelColors(this.$.canvas, imageData, pixelsPerWidth, pixelsPerHeight);
+        this.tldr = this._getClosestEmoji(this._getAverageColor(imageData));
 
         // I don't love this.
         var container = Polymer.dom(this.$.content).getDistributedNodes()[0];
@@ -196,6 +215,27 @@
         }
 
         return window.emojiColorMap[minColor];
+      },
+
+      _getAverageColor: function(imageData) {
+        var interval = 10;  // only look at every 10th pixel.
+        var rgb = {r:0, g:0, b:0};
+        var i = -4;
+        var count = 0;
+
+        while ( (i += interval * 4) < imageData.data.length ) {
+          ++count;
+          rgb.r += imageData.data[i];
+          rgb.g += imageData.data[i+1];
+          rgb.b += imageData.data[i+2];
+        }
+
+        // ~~ used to floor values
+        rgb.r = ~~(rgb.r/count);
+        rgb.g = ~~(rgb.g/count);
+        rgb.b = ~~(rgb.b/count);
+
+        return 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
       }
     });
   </script>

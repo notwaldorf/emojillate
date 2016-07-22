@@ -41,7 +41,7 @@
     }
   </style>
 </head>
-<body>
+<body unresolved>
   <div class="wrapper">
     <h1 title="emoji + pixellate = emojillate">~~emojillate~~</h1>
 
@@ -57,7 +57,7 @@
           <button class="button" on-click="uploadGist" title="upload gist">
             <iron-icon icon="custom:github" id="uploadButton"></iron-icon> Create gist
           </button>
-          <div><a class="result" href="" target="_blank"></a>&nbsp;</div>
+          <div><span class="statusText"></span><a class="statusLink" href="" target="_blank"></a>&nbsp;</div>
         </span>
         <!-- <span id="filename"></span> -->
         <input type="file" id="loader" on-change="munge">
@@ -87,7 +87,7 @@
   t.munge = function(e) {
     actions.hidden = false;
     pixeler.file = e.target.files[0];
-    result.textContent = result.href = '';
+    clearStatus();
     //filename.innerHTML = e.target.files[0].name;
   }
 
@@ -119,14 +119,16 @@
   }
 
   t.uploadGist = function() {
-    var result = document.querySelector('.result');
-    result.textContent = 'Creating gist...';
-    result.href = '';
+    clearStatus();
+    var result = document.querySelector('.statusText').textContent = 'Creating gist...';
 
     var fileContents = document.querySelector('.output').innerText;
-    var request = {'description': 'Made with http://meowni.ca/emojillate', 'public': 'true',
-                   'files': {'emojiemoji.txt': { 'content': fileContents}
-                 }};
+    var fileName = document.querySelector('pixel-er').tldr;
+    var request = {'description': 'Made with http://meowni.ca/emojillate',
+                    'public': 'true',
+                    'files': {}
+                  };
+    request.files[fileName] = {'content': fileContents};
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'https://api.github.com/gists', true);
@@ -135,7 +137,11 @@
     xhr.addEventListener("readystatechange", function(e) {
       if (this.readyState === 4 && this.status >= 200 && this.status < 300) {
         var response = JSON.parse(xhr.responseText);
-        result.textContent = result.href = response.html_url;
+
+        clearStatus();
+        document.querySelector('.statusText').textContent = fileName + ' ';
+        var link = document.querySelector('.statusLink');
+        link.textContent = link.href = response.html_url;
 
         uploadButton.icon = 'icons:done';
 
@@ -150,5 +156,10 @@
     }, false);
   }
 
+  function clearStatus() {
+    document.querySelector('.statusText').textContent = '';
+    var link = document.querySelector('.statusLink');
+    link.textContent = link.href = '';
+  }
 </script>
 </html>
