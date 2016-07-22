@@ -118,7 +118,6 @@
 
         var imageData = this._getPixellatedImageData(pixelsPerWidth, pixelsPerHeight);
         var colors = this._getPixelColors(this.$.canvas, imageData, pixelsPerWidth, pixelsPerHeight);
-        this.tldr = this._getClosestEmoji(this._getAverageColor(imageData));
 
         // I don't love this.
         var container = Polymer.dom(this.$.content).getDistributedNodes()[0];
@@ -133,10 +132,12 @@
         var pixelWidth = this.$.canvas.width / pixelsPerWidth;
         var pixelHeight = this.$.canvas.height / pixelsPerHeight
 
+        var pixelArrayForMode = [];
         for (var i = 0; i < colors.length; i++) {
           var pixel = this._drawPixel(colors[i], pixelWidth, pixelHeight);
 
           fragment.appendChild(pixel);
+          pixelArrayForMode.push(pixel.textContent);
 
           // Add a <br> at the end of every row so that we can copy paste this
           // as a grid.
@@ -145,6 +146,8 @@
           }
         }
         container.appendChild(fragment);
+
+        this.tldr = this._getTldr(pixelArrayForMode);
       },
 
       _getPixellatedImageData: function(pixelsPerWidth, pixelsPerHeight) {
@@ -217,25 +220,20 @@
         return window.emojiColorMap[minColor];
       },
 
-      _getAverageColor: function(imageData) {
-        var interval = 10;  // only look at every 10th pixel.
-        var rgb = {r:0, g:0, b:0};
-        var i = -4;
-        var count = 0;
+      _getTldr: function(array) {
+        var emojiMap = {};
 
-        while ( (i += interval * 4) < imageData.data.length ) {
-          ++count;
-          rgb.r += imageData.data[i];
-          rgb.g += imageData.data[i+1];
-          rgb.b += imageData.data[i+2];
+        for(var i = 0; i < array.length; i++) {
+          var el = array[i];
+          if (emojiMap[el] == null)
+            emojiMap[el] = 1;
+          else
+            emojiMap[el]++;
         }
 
-        // ~~ used to floor values
-        rgb.r = ~~(rgb.r/count);
-        rgb.g = ~~(rgb.g/count);
-        rgb.b = ~~(rgb.b/count);
+        var sortedEmoji = Object.keys(emojiMap).sort(function(a,b){return emojiMap[b]-emojiMap[a]});
 
-        return 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
+        return '' + sortedEmoji[0] + sortedEmoji[1] + sortedEmoji[2];
       }
     });
   </script>
