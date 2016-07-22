@@ -162,11 +162,6 @@
       },
 
       _getPixelColors: function(canvas, imageData, pixelsPerWidth, pixelsPerHeight) {
-        function getRGBA(data) {
-          return 'rgba(' + data[0] + ',' + data[1] +
-                  ',' + data[2] + ',' + data[3] + ')';
-        }
-
         var colors = [];
         var widthRatio = canvas.width / pixelsPerWidth;
         var heightRatio = canvas.height / pixelsPerHeight;
@@ -178,9 +173,8 @@
             var y = Math.round(heightRatio * j + 1) * canvas.width * 4;
 
             var pixel = [imageData.data[y + x], imageData.data[y + x + 1], imageData.data[y + x + 2], imageData.data[y + x + 3]];
-            var rgba = getRGBA(pixel);
 
-            colors.push(rgba);
+            colors.push(pixel);
           }
         }
         return colors;
@@ -192,32 +186,29 @@
         pixel.style.display = 'inline-block';
         pixel.style.width = pixel.style.height = size + 'px';
         pixel.style.fontSize = size - 2 + 'px';
-        pixel.style.backgroundColor = rgba;
+        pixel.style.backgroundColor = 'rgba(' + rgba[0] + ',' + rgba[1] + ',' + rgba[2] + ',' + rgba[3] + ')';
         this.toggleClass('no-background', this.noBackground, pixel);
         pixel.textContent = this._getClosestEmoji(rgba);
         return pixel;
       },
 
       _getClosestEmoji: function(rgba) {
-        var split = rgba.replace('rgba(', '').replace(')', '').split(',');
         var minDistance = 10000000;
-        var minColor = null;
+        var emoji = null;
 
-        for (var color in window.emojiColorMap) {
-          var rgb = color.split(',');
-
+        window.emojiColorMap.forEach(function getDistance(item) {
           // This is a bit of a lie. Try to convert to Lab, where distances have meanings.
           var distance =
-              3 * Math.abs(rgb[0] - split[0]) +
-              4 * Math.abs(rgb[1] - split[1]) +
-              3 * Math.abs(rgb[2] - split[2]);
+                  3 * Math.abs(item.color[0] - rgba[0]) +
+                  4 * Math.abs(item.color[1] - rgba[1]) +
+                  3 * Math.abs(item.color[2] - rgba[2]);
           if (distance <= minDistance) {
             minDistance = distance;
-            minColor = color;
+            emoji = item.emoji;
           }
-        }
+        });
 
-        return window.emojiColorMap[minColor];
+        return emoji;
       },
 
       // This may be literally the slowest way to do this.
