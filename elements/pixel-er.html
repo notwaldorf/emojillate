@@ -123,7 +123,9 @@
         var container = Polymer.dom(this.$.content).getDistributedNodes()[0];
 
         // Remove the previous render and redisplay the new image.
-        container.innerHTML = '';
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
         container.style.width = this.$.canvas.width +'px';
         container.style.height = this.$.canvas.height +'px';
 
@@ -133,8 +135,10 @@
         var pixelHeight = this.$.canvas.height / pixelsPerHeight
 
         var pixelArrayForMode = [];
+        var modelPixel = this._createModelPixel(pixelWidth, pixelHeight);
+
         for (var i = 0; i < colors.length; i++) {
-          var pixel = this._drawPixel(colors[i], pixelWidth, pixelHeight);
+          var pixel = this._drawPixel(modelPixel.cloneNode(), colors[i]);
 
           fragment.appendChild(pixel);
           pixelArrayForMode.push(pixel.textContent);
@@ -162,11 +166,6 @@
       },
 
       _getPixelColors: function(canvas, imageData, pixelsPerWidth, pixelsPerHeight) {
-        function getRGBA(data) {
-          return 'rgba(' + data[0] + ',' + data[1] +
-                  ',' + data[2] + ',' + data[3] + ')';
-        }
-
         var colors = [];
         var widthRatio = canvas.width / pixelsPerWidth;
         var heightRatio = canvas.height / pixelsPerHeight;
@@ -178,46 +177,58 @@
             var y = Math.round(heightRatio * j + 1) * canvas.width * 4;
 
             var pixel = [imageData.data[y + x], imageData.data[y + x + 1], imageData.data[y + x + 2], imageData.data[y + x + 3]];
-            var rgba = getRGBA(pixel);
 
-            colors.push(rgba);
+            colors.push(pixel);
           }
         }
         return colors;
       },
 
-      _drawPixel: function(rgba, size) {
+      _createModelPixel: function(size) {
         var pixel = document.createElement('span');
         pixel.className = 'pixel';
         pixel.style.display = 'inline-block';
         pixel.style.width = pixel.style.height = size + 'px';
         pixel.style.fontSize = size - 2 + 'px';
-        pixel.style.backgroundColor = rgba;
-        this.toggleClass('no-background', this.noBackground, pixel);
+        if(this.noBackground) {
+          pixel.classList.add('no-background');
+        }
+
+        return pixel;
+      },
+
+      _drawPixel: function(pixel, rgba) {
+        pixel.style.backgroundColor = 'rgba(' + rgba[0] + ',' + rgba[1] + ',' + rgba[2] + ',' + rgba[3] + ')';
         pixel.textContent = this._getClosestEmoji(rgba);
         return pixel;
       },
 
+      _closestEmoji: [],
+
       _getClosestEmoji: function(rgba) {
-        var split = rgba.replace('rgba(', '').replace(')', '').split(',');
-        var minDistance = 10000000;
-        var minColor = null;
-
-        for (var color in window.emojiColorMap) {
-          var rgb = color.split(',');
-
-          // This is a bit of a lie. Try to convert to Lab, where distances have meanings.
-          var distance =
-              3 * Math.abs(rgb[0] - split[0]) +
-              4 * Math.abs(rgb[1] - split[1]) +
-              3 * Math.abs(rgb[2] - split[2]);
-          if (distance <= minDistance) {
-            minDistance = distance;
-            minColor = color;
-          }
+        // this function is slooow, so we cache the results in hopes that we will be able to reuse them
+        if (this._closestEmoji[rgba]) {
+          return this._closestEmoji[rgba];
         }
 
-        return window.emojiColorMap[minColor];
+        var minDistance = 10000000;
+        var emoji = null;
+
+        window.emojiColorMap.forEach(function getDistance(item) {
+          // This is a bit of a lie. Try to convert to Lab, where distances have meanings.
+          var distance =
+                  3 * Math.abs(item.color[0] - rgba[0]) +
+                  4 * Math.abs(item.color[1] - rgba[1]) +
+                  3 * Math.abs(item.color[2] - rgba[2]);
+          if (distance <= minDistance) {
+            minDistance = distance;
+            emoji = item.emoji;
+          }
+        });
+
+        this._closestEmoji[rgba] = emoji;
+
+        return emoji;
       },
 
       // This may be literally the slowest way to do this.
