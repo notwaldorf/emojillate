@@ -122,8 +122,8 @@
     clearStatus();
     var result = document.querySelector('.statusText').textContent = 'Creating gist...';
 
-    var fileContents = document.querySelector('.output').innerText;
-    var fileName = document.querySelector('pixel-er').tldr;
+    var fileContents = document.querySelector('.output').innerText.replace(/\n/g, '    \n');
+    var fileName = document.querySelector('pixel-er').tldr + '.md';
     var request = {'description': 'Made with http://meowni.ca/emojillate',
                     'public': 'true',
                     'files': {}
