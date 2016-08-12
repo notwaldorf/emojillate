@@ -3,10 +3,9 @@
   "version": "0.0.1",
   "description": "A thing that turns something into something better",
   "authors": [
-    "Monica Dinculescu"
+    "Monica Dinculescu <noms@google.com>"
   ],
   "private": true,
-  "license": "http://polymer.github.io/LICENSE.txt",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.1.0",
     "iron-iconset-svg": "polymerelements/iron-iconset-svg#^1.0.0",
