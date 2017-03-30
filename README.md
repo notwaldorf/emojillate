@@ -8,7 +8,7 @@ The emojilated image is just text so you can copy it and send it to everyone you
 
 ## How to Emojillate
 
-Just upload an image on the [website] (http://meowni.ca/emojillate/) and emojilate away!
+Just upload an image on the [website](http://meowni.ca/emojillate/) and emojilate away!
 
 - You can hide the background (or not!)
 - You can also change the resolution of the emoji pixels
