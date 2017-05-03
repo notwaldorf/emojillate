@@ -1,7 +1,8 @@
 {
   "name": "webcomponentsjs",
+  "description": "Web components polyfill",
   "main": "webcomponents.js",
-  "version": "0.7.22",
+  "version": "1.0.0-rc.11",
   "homepage": "http://webcomponents.org",
   "authors": [
     "The Polymer Authors"
@@ -11,20 +12,30 @@
     "url": "https://github.com/webcomponents/webcomponentsjs.git"
   },
   "keywords": [
-    "webcomponents"
+    "webcomponents",
+    "web-components",
+    "polyfill",
+    "shim"
   ],
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "ignore": [],
   "devDependencies": {
-    "web-component-tester": "^4.0.1"
+    "web-component-tester": "^v6.0.0-prerelease.10",
+    "custom-elements": "webcomponents/custom-elements#^v1.0.0-rc.1",
+    "es6-promise": "stefanpenner/es6-promise#^4.0.0",
+    "html-imports": "webcomponents/html-imports#^v1.0.0-rc.2",
+    "shadydom": "webcomponents/shadydom#^v1.0.0-rc.1",
+    "shadycss": "webcomponents/shadycss#^v1.0.0-rc.1",
+    "template": "webcomponents/template#^v1.0.0-rc.1",
+    "webcomponents-platform": "webcomponents/webcomponents-platform#^v1.0.0-rc.1"
   },
-  "_release": "0.7.22",
+  "_release": "1.0.0-rc.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.7.22",
-    "commit": "50f9751f8e638301603aebb33ba9f1e90d2b0d32"
+    "tag": "v1.0.0-rc.11",
+    "commit": "390737cf4004425a48c03158dc96232f5d7967f7"
   },
-  "_source": "git://github.com/webcomponents/webcomponentsjs.git",
-  "_target": "^0.7.0",
+  "_source": "https://github.com/webcomponents/webcomponentsjs.git",
+  "_target": "^1.0.0-rc.11",
   "_originalSource": "webcomponents/webcomponentsjs"
 }

@@ -1,6 +1,5 @@
 {
   "name": "paper-ripple",
-  "version": "1.0.8",
   "license": "http://polymer.github.io/LICENSE.txt",
   "description": "Adds a material design ripple to any container",
   "private": true,
@@ -18,28 +17,44 @@
   },
   "main": "paper-ripple.html",
   "dependencies": {
-    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#^1.1.5",
-    "polymer": "Polymer/polymer#^1.1.0"
+    "iron-a11y-keys-behavior": "PolymerElements/iron-a11y-keys-behavior#2.0-preview",
+    "polymer": "Polymer/polymer#^2.0.0-rc.1"
   },
   "devDependencies": {
-    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
-    "iron-icon": "polymerelements/iron-icon#^1.0.0",
-    "iron-icons": "polymerelements/iron-icons#^1.0.0",
-    "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.0.0",
-    "paper-styles": "polymerelements/paper-styles#^1.0.0",
-    "test-fixture": "polymerelements/test-fixture#^1.0.0",
-    "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "iron-component-page": "polymerelements/iron-component-page#2.0-preview",
+    "iron-icon": "polymerelements/iron-icon#2.0-preview",
+    "iron-icons": "polymerelements/iron-icons#2.0-preview",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#2.0-preview",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
+    "web-component-tester": "^6.0.0-prerelease.6",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.1"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "iron-a11y-keys-behavior": "PolymerElements/iron-a11y-keys-behavior#^1.0.0",
+        "polymer": "Polymer/polymer#^1.7.0"
+      },
+      "devDependencies": {
+        "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+        "iron-icon": "polymerelements/iron-icon#^1.0.0",
+        "iron-icons": "polymerelements/iron-icons#^1.0.0",
+        "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.0.0",
+        "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+        "web-component-tester": "^4.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+      }
+    }
   },
   "ignore": [],
   "homepage": "https://github.com/PolymerElements/paper-ripple",
-  "_release": "1.0.8",
+  "_release": "049c328875",
   "_resolution": {
-    "type": "version",
-    "tag": "v1.0.8",
-    "commit": "eb1c01cac162b7ce7e78760d5c0df61c9a5c2974"
+    "type": "branch",
+    "branch": "2.0-preview",
+    "commit": "049c328875d5e853c41b70d8996efea3f83aa886"
   },
-  "_source": "git://github.com/PolymerElements/paper-ripple.git",
-  "_target": "^1.0.0",
+  "_source": "https://github.com/PolymerElements/paper-ripple.git",
+  "_target": "2.0-preview",
   "_originalSource": "PolymerElements/paper-ripple"
 }

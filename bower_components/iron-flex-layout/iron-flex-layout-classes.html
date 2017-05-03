@@ -35,8 +35,7 @@ The following imports are available:
 <dom-module id="iron-flex">
   <template>
     <style>
-      .layout.horizontal,
-      .layout.vertical {
+      .layout {
         display: -ms-flexbox;
         display: -webkit-flex;
         display: flex;
@@ -64,6 +63,12 @@ The following imports are available:
         -ms-flex-wrap: wrap;
         -webkit-flex-wrap: wrap;
         flex-wrap: wrap;
+      }
+
+      .layout.no-wrap {
+        -ms-flex-wrap: nowrap;
+        -webkit-flex-wrap: nowrap;
+        flex-wrap: nowrap;
       }
 
       .layout.center,
@@ -232,7 +237,7 @@ The following imports are available:
         -ms-align-self: baseline;
         -webkit-align-self: baseline;
         align-self: baseline;
-      };
+      }
 
       /**
        * multi-line alignment in main axis.
@@ -364,7 +369,6 @@ The following imports are available:
         display: block;
       }
 
-      /* IE 10 support for HTML5 hidden attr */
       [hidden] {
         display: none !important;
       }

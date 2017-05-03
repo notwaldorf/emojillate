@@ -150,6 +150,8 @@ Apply `circle` class to make the rippling effect within a circle.
 </dom-module>
 <script>
   (function() {
+    'use strict';
+
     var Utility = {
       distance: function(x1, y1, x2, y2) {
         var xDelta = (x1 - x2);
@@ -693,6 +695,11 @@ Apply `circle` class to make the rippling effect within a circle.
         }
       },
 
+      /**
+       * This conflicts with Element#antimate().
+       * https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
+       * @suppress {checkTypes}
+       */
       animate: function() {
         if (!this._animating) {
           return;

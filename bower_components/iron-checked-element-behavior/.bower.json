@@ -1,6 +1,5 @@
 {
   "name": "iron-checked-element-behavior",
-  "version": "1.0.5",
   "description": "Implements an element that has a checked attribute and can be added to a form",
   "authors": "The Polymer Authors",
   "keywords": [
@@ -19,25 +18,40 @@
   "homepage": "https://github.com/PolymerElements/iron-checked-element-behavior",
   "ignore": [],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.1.0",
-    "iron-validatable-behavior": "PolymerElements/iron-validatable-behavior#^1.0.0",
-    "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior#^1.0.0"
+    "polymer": "Polymer/polymer#^2.0.0-rc.1",
+    "iron-validatable-behavior": "PolymerElements/iron-validatable-behavior#2.0-preview",
+    "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior#2.0-preview"
   },
   "devDependencies": {
-    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
-    "paper-button": "PolymerElements/paper-button#^1.0.0",
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
-    "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "paper-styles": "PolymerElements/paper-styles#2.0-preview",
+    "paper-button": "PolymerElements/paper-button#2.0-preview",
+    "iron-component-page": "PolymerElements/iron-component-page#2.0-preview",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0-prerelease.6",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.1"
   },
-  "_release": "1.0.5",
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "Polymer/polymer#^1.1.0",
+        "iron-validatable-behavior": "PolymerElements/iron-validatable-behavior#^1.0.0",
+        "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior#^1.0.0"
+      },
+      "devDependencies": {
+        "paper-styles": "PolymerElements/paper-styles#^1.0.0",
+        "paper-button": "PolymerElements/paper-button#^1.0.0",
+        "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+        "web-component-tester": "Polymer/web-component-tester#^4.0.0"
+      }
+    }
+  },
+  "_release": "4d5ac4b7c8",
   "_resolution": {
-    "type": "version",
-    "tag": "v1.0.5",
-    "commit": "c70add47a9af62d30746587e8a1303fb390787c6"
+    "type": "branch",
+    "branch": "2.0-preview",
+    "commit": "4d5ac4b7c8823300a68a53d9a7e09ee6e70c6484"
   },
-  "_source": "git://github.com/PolymerElements/iron-checked-element-behavior.git",
-  "_target": "^1.0.0",
+  "_source": "https://github.com/PolymerElements/iron-checked-element-behavior.git",
+  "_target": "2.0-preview",
   "_originalSource": "PolymerElements/iron-checked-element-behavior"
 }
