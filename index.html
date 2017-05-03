@@ -13,66 +13,70 @@
   <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
   <link rel="import" href="bower_components/iron-icon/iron-icon.html">
   <link rel="import" href="bower_components/paper-slider/paper-slider.html">
-  <link rel="import" href="elements/pixel-er.html">
+  <link rel="import" href="elements/emoji-llate.html">
   <link rel="import" href="elements/icons.html">
 
-  <style is="custom-style">
-    paper-slider {
-      --paper-slider-knob-color: #01beb4;
-      --paper-slider-active-color: #01beb4;
-      --paper-slider-pin-color: #01beb4;
-      width: 30%;
-      margin-right: 30px;
-    }
-    paper-checkbox {
-      --paper-checkbox-checked-color: #01beb4;
-      --paper-checkbox-checked-ink-color: #01beb4;
-      --paper-checkbox-unchecked-color: #01beb4;
-      --paper-checkbox-unchecked-ink-color: #01beb4;
-      --paper-checkbox-label-color: #01beb4;
-      font-family: 'Lato', 'Helvetica', sans-serif;
-      font-weight: 400;
-    }
-    paper-icon-button {
-      border-radius: 50%;
-    }
-    paper-icon-button:hover {
-      background: #bdf0f1;
-    }
-  </style>
+  <custom-style>
+    <style is="custom-style">
+      paper-slider {
+        --paper-slider-knob-color: #01beb4;
+        --paper-slider-active-color: #01beb4;
+        --paper-slider-pin-color: #01beb4;
+        width: 30%;
+        margin-right: 30px;
+      }
+      paper-checkbox {
+        --paper-checkbox-checked-color: #01beb4;
+        --paper-checkbox-checked-ink-color: #01beb4;
+        --paper-checkbox-unchecked-color: #01beb4;
+        --paper-checkbox-unchecked-ink-color: #01beb4;
+        --paper-checkbox-label-color: #01beb4;
+        font-family: 'Lato', 'Helvetica', sans-serif;
+        font-weight: 400;
+      }
+      paper-icon-button {
+        border-radius: 50%;
+      }
+      paper-icon-button:hover {
+        background: #bdf0f1;
+      }
+    </style>
+  </custom-style>
 </head>
 <body unresolved>
   <div class="wrapper">
     <h1 title="emoji + pixellate = emojillate">~~emojillate~~</h1>
 
-    <template is="dom-bind" id="t">
-      <div class="file">
-        <label for="loader" class="button">
-          <iron-icon icon="icons:upload"></iron-icon> Load image
-        </label>
-        <span id="actions">
-          <button class="button" on-click="copyToClipboard" title="copy to clipboard">
-            <iron-icon icon="icons:copy" id="copyButton"></iron-icon> Copy
-          </button>
-          <button class="button" on-click="uploadGist" title="upload gist">
-            <iron-icon icon="custom:github" id="uploadButton"></iron-icon> Create gist
-          </button>
-          <div><span class="statusText"></span><a class="statusLink" href="" target="_blank"></a>&nbsp;</div>
-        </span>
-        <!-- <span id="filename"></span> -->
-        <input type="file" id="loader" on-change="munge">
-      </div>
-      <div>
-        <span class="slider-label">resolution</span>
-        <paper-slider value="{{_value}}" pin snaps step=5 min=5 max=80></paper-slider>
-        <paper-checkbox checked="{{_noBackground}}">hide background</paper-checkbox>
-      </div>
-      <br><br>
+    <dom-bind id="t">
+      <template is="dom-bind">
+        <div class="file">
+          <label for="loader" class="button">
+            <iron-icon icon="icons:upload"></iron-icon> Load image
+          </label>
+          <span id="actions">
+            <button class="button" on-click="copyToClipboard" title="copy to clipboard">
+              <iron-icon icon="icons:copy" id="copyButton"></iron-icon> Copy
+            </button>
+            <button class="button" on-click="uploadGist" title="upload gist">
+              <iron-icon icon="custom:github" id="uploadButton"></iron-icon> Create gist
+            </button>
+            <div><span class="statusText"></span><a class="statusLink" href="" target="_blank"></a>&nbsp;</div>
+          </span>
+          <!-- <span id="filename"></span> -->
+          <input type="file" id="loader" on-change="munge">
+        </div>
+        <div>
+          <span class="slider-label">resolution</span>
+          <paper-slider value="{{_value}}" pin snaps step=5 min=5 max=80></paper-slider>
+          <paper-checkbox checked="{{_noBackground}}">hide background</paper-checkbox>
+        </div>
+        <br><br>
 
-      <pixel-er id="pixeler" resolution="{{_value}}" no-background="{{_noBackground}}">
-        <div class="output"></div>
-      </pixel-er>
-    </template>
+        <emoji-llate id="emojillate" resolution="{{_value}}" no-background="{{_noBackground}}">
+          <div class="output"></div>
+        </emoji-llate>
+      </template>
+    <dom-bind>
 
     <footer>
       <p>made with 🧀 &amp; 🍷 by <a href="https://twitter.com/notwaldorf" target="_blank">monica</a>.
@@ -86,7 +90,7 @@
 
   t.munge = function(e) {
     actions.hidden = false;
-    pixeler.file = e.target.files[0];
+    emojillate.file = e.target.files[0];
     clearStatus();
     //filename.innerHTML = e.target.files[0].name;
   }
@@ -123,7 +127,7 @@
     var result = document.querySelector('.statusText').textContent = 'Creating gist...';
 
     var fileContents = document.querySelector('.output').innerText;
-    var fileName = document.querySelector('pixel-er').tldr;
+    var fileName = document.querySelector('emoji-llate').tldr;
     var request = {'description': 'Made with http://meowni.ca/emojillate',
                     'public': 'true',
                     'files': {}

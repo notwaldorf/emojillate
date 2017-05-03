@@ -1,103 +1,91 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <script src="../js/emoji-map.js"></script>
 
-<dom-module id="pixel-er">
-  <template strip-whitespace>
+<dom-module id="emoji-llate">
+  <template>
     <style>
       :host {
         display: inline-block;
       }
 
-      :host ::content .output {
+      :host ::slotted(span) {
         word-wrap: break-word;
-      }
-
-      :host ::content .no-background {
-        background: white !important;
       }
     </style>
 
     <canvas id="canvas" width="400" height="400" hidden></canvas>
     <img id="image" on-load="_onImageLoaded" hidden>
-    <content id="content" select=".output"></content>
-
+    <slot id="content"></slot>
     <canvas id="palette" height="22" width="22" hidden>
   </template>
 
   <script>
-    Polymer({
-      is: 'pixel-er',
+    class Emojillate extends Polymer.Element {
+      static get is() { return 'emoji-llate'; }
 
-      properties: {
-        /*
-         * Image file to emojillate.
-         */
-        file: {
-          type: Object,
-          observer: '_fileChanged'
-        },
+      static get properties() {
+        return {
+          /*
+           * Image file to emojillate.
+           */
+          file: {
+            type: Object,
+            observer: '_fileChanged'
+          },
 
-        /*
-         * Resolution (i.e number of pixels per width of image) at which to emojillate.
-         */
-        resolution: {
-          type: Number,
-          observer: '_resolutionChanged'
-        },
+          /*
+           * Resolution (i.e number of pixels per width of image) at which to emojillate.
+           */
+          resolution: {
+            type: Number,
+            observer: '_resolutionChanged'
+          },
 
-        /*
-         * Set this to true to hide the image background on the emojillated image.
-         */
-        noBackground: {
-          type: Boolean,
-          value: false,
-          observer: '_noBackgroundChanged'
-        },
+          /*
+           * Set this to true to hide the image background on the emojillated image.
+           */
+          noBackground: {
+            type: Boolean,
+            value: false,
+            observer: '_noBackgroundChanged'
+          },
 
-        /*
-         * The one emoji representing the entire image. Obtained by calculating
-         * the average color of the entire original image, and finding the closest
-         * emoji to that.
-         */
-        tldr: {
-          type: String
-        },
-      },
+          /*
+           * The one emoji representing the entire image. Obtained by calculating
+           * the average color of the entire original image, and finding the closest
+           * emoji to that.
+           */
+          tldr: {
+            type: String
+          },
+        }
+      }
 
-      attached: function() {
-        this._ctx = this.$.canvas.getContext('2d');
-
-        // From https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled
-        this._ctx.mozImageSmoothingEnabled = false;
-        this._ctx.msImageSmoothingEnabled = false;
-        this._ctx.imageSmoothingEnabled = false;
-      },
-
-      _fileChanged: function(file) {
+      _fileChanged(file) {
         if (!this._reader) {
           this._reader = new FileReader();
           this._reader.onload = this._loadFile.bind(this);
         }
         this._reader.readAsDataURL(file);
-      },
+      }
 
-      _resolutionChanged: function() {
+      _resolutionChanged() {
         this._onImageLoaded();
-      },
+      }
 
-      _noBackgroundChanged: function(noBackground) {
-        var container = Polymer.dom(this.$.content).getDistributedNodes()[0];
+      _noBackgroundChanged(noBackground) {
+        var container = this.$.content.assignedNodes()[1];
         var pixels = container.querySelectorAll('.pixel');
         for (var i = 0; i < pixels.length; i++) {
-          this.toggleClass('no-background', noBackground, pixels[i]);
+          pixels[i].style.background = noBackground ? 'white' : pixels[i].dataset.background;
         }
-      },
+      }
 
-      _loadFile: function(event) {
+      _loadFile(event) {
         this.$.image.src = event.target.result;
-      },
+      }
 
-      _onImageLoaded: function() {
+      _onImageLoaded() {
         var imageRatio = this.$.image.height / this.$.image.width;
 
         var pixelsPerWidth = this.resolution;
@@ -108,9 +96,9 @@
         this.$.canvas.height = Math.ceil(this.$.canvas.width * imageRatio);
 
         this._displayPixelatedImage(pixelsPerWidth, pixelsPerHeight);
-      },
+      }
 
-      _displayPixelatedImage: function(pixelsPerWidth, pixelsPerHeight) {
+      _displayPixelatedImage(pixelsPerWidth, pixelsPerHeight) {
         // Oopsies?
         if (!this.$.canvas.width || !this.$.canvas.height) {
           return;
@@ -120,7 +108,7 @@
         var colors = this._getPixelColors(this.$.canvas, imageData, pixelsPerWidth, pixelsPerHeight);
 
         // I don't love this.
-        var container = Polymer.dom(this.$.content).getDistributedNodes()[0];
+        var container = this.$.content.assignedNodes()[1];
 
         // Remove the previous render and redisplay the new image.
         while (container.firstChild) {
@@ -152,9 +140,18 @@
         container.appendChild(fragment);
 
         this.tldr = this._getTldr(pixelArrayForMode);
-      },
+      }
 
-      _getPixellatedImageData: function(pixelsPerWidth, pixelsPerHeight) {
+      _getPixellatedImageData(pixelsPerWidth, pixelsPerHeight) {
+        // Set up the canvas pixellation.
+        if (!this._ctx) {
+          this._ctx = this.$.canvas.getContext('2d');
+
+          // From https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled
+          this._ctx.mozImageSmoothingEnabled = false;
+          this._ctx.msImageSmoothingEnabled = false;
+          this._ctx.imageSmoothingEnabled = false;
+        }
         // Draw the image super tiny and then scale it from the tiny size
         // to the actual canvas size, which pixellates it.
         this._ctx.drawImage(this.$.image, 0, 0, pixelsPerWidth, pixelsPerHeight);
@@ -163,9 +160,9 @@
                      0, 0, this.$.canvas.width, this.$.canvas.height /* dest */);
 
         return this._ctx.getImageData(0, 0, this.$.canvas.width, this.$.canvas.height);
-      },
+      }
 
-      _getPixelColors: function(canvas, imageData, pixelsPerWidth, pixelsPerHeight) {
+      _getPixelColors(canvas, imageData, pixelsPerWidth, pixelsPerHeight) {
         var colors = [];
         var widthRatio = canvas.width / pixelsPerWidth;
         var heightRatio = canvas.height / pixelsPerHeight;
@@ -182,30 +179,27 @@
           }
         }
         return colors;
-      },
+      }
 
-      _createModelPixel: function(size) {
+      _createModelPixel(size) {
         var pixel = document.createElement('span');
         pixel.className = 'pixel';
         pixel.style.display = 'inline-block';
         pixel.style.width = pixel.style.height = size + 'px';
         pixel.style.fontSize = size - 2 + 'px';
-        if(this.noBackground) {
-          pixel.classList.add('no-background');
-        }
-
         return pixel;
-      },
+      }
 
-      _drawPixel: function(pixel, rgba) {
-        pixel.style.backgroundColor = 'rgba(' + rgba[0] + ',' + rgba[1] + ',' + rgba[2] + ',' + rgba[3] + ')';
+      _drawPixel(pixel, rgba) {
+        pixel.dataset.background = pixel.style.backgroundColor = 'rgba(' + rgba[0] + ',' + rgba[1] + ',' + rgba[2] + ',' + rgba[3] + ')';
         pixel.textContent = this._getClosestEmoji(rgba);
         return pixel;
-      },
+      }
 
-      _closestEmoji: [],
+      _getClosestEmoji(rgba) {
+        if (!this._closestEmoji)
+          this._closestEmoji = [];
 
-      _getClosestEmoji: function(rgba) {
         // this function is slooow, so we cache the results in hopes that we will be able to reuse them
         if (this._closestEmoji[rgba]) {
           return this._closestEmoji[rgba];
@@ -229,10 +223,10 @@
         this._closestEmoji[rgba] = emoji;
 
         return emoji;
-      },
+      }
 
       // This may be literally the slowest way to do this.
-      _getTldr: function(array) {
+      _getTldr(array) {
         var emojiMap = {};
 
         for(var i = 0; i < array.length; i++) {
@@ -259,6 +253,8 @@
 
         return s;
       }
-    });
+    }
+
+    customElements.define('emoji-llate', Emojillate);
   </script>
 </dom-module>

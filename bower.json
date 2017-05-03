@@ -1,20 +1,40 @@
 {
   "name": "emojillate",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A thing that turns something into something better",
   "authors": [
     "Monica Dinculescu <noms@google.com>"
   ],
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.1.0",
-    "iron-iconset-svg": "polymerelements/iron-iconset-svg#^1.0.0",
-    "iron-icon": "polymerelements/iron-icon#^1.0.0",
-    "paper-checkbox": "polymerelements/paper-checkbox#^1.0.0",
-    "paper-slider": "polymerelements/paper-slider#^1.0.0"
+    "polymer": "Polymer/polymer#^2.0.0-rc.7",
+    "iron-iconset-svg": "polymerelements/iron-iconset-svg#2.0-preview",
+    "iron-icon": "polymerelements/iron-icon#2.0-preview",
+    "paper-checkbox": "polymerelements/paper-checkbox#2.0-preview",
+    "paper-slider": "polymerelements/paper-slider#2.0-preview"
   },
   "devDependencies": {
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.11"
   },
-  "main": "index.html"
+  "main": "index.html",
+  "resolutions": {
+    "iron-meta": "2.0-preview",
+    "iron-flex-layout": "2.0-preview",
+    "polymer": "^2.0.0-rc.7",
+    "iron-checked-element-behavior": "2.0-preview",
+    "iron-validatable-behavior": "2.0-preview",
+    "iron-form-element-behavior": "2.0-preview",
+    "paper-behaviors": "2.0-preview",
+    "iron-behaviors": "2.0-preview",
+    "iron-a11y-keys-behavior": "2.0-preview",
+    "paper-ripple": "2.0-preview",
+    "paper-input": "2.0-preview",
+    "iron-autogrow-textarea": "2.0-preview",
+    "iron-input": "2.0-preview",
+    "iron-a11y-announcer": "2.0-preview",
+    "paper-progress": "2.0-preview",
+    "iron-range-behavior": "2.0-preview",
+    "paper-styles": "2.0-preview",
+    "webcomponentsjs": "^1.0.0-rc.11"
+  }
 }
