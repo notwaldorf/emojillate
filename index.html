@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="bower_components/polymer/polymer.html">
   <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
   <link rel="import" href="bower_components/iron-icon/iron-icon.html">
   <link rel="import" href="bower_components/paper-slider/paper-slider.html">
@@ -50,7 +51,8 @@
     <dom-bind id="t">
       <template is="dom-bind">
         <div class="file">
-          <label for="loader" class="button">
+          <label class="button">
+            <input type="file" on-change="munge">
             <iron-icon icon="icons:upload"></iron-icon> Load image
           </label>
           <span id="actions">
@@ -62,8 +64,6 @@
             </button>
             <div><span class="statusText"></span><a class="statusLink" href="" target="_blank"></a>&nbsp;</div>
           </span>
-          <!-- <span id="filename"></span> -->
-          <input type="file" id="loader" on-change="munge">
         </div>
         <div>
           <span class="slider-label">resolution</span>
@@ -93,6 +93,7 @@
     emojillate.file = e.target.files[0];
     clearStatus();
     //filename.innerHTML = e.target.files[0].name;
+    return false;
   }
 
   t.copyToClipboard = function() {
