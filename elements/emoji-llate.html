@@ -191,7 +191,13 @@
       }
 
       _drawPixel(pixel, rgba) {
-        pixel.dataset.background = pixel.style.backgroundColor = 'rgba(' + rgba[0] + ',' + rgba[1] + ',' + rgba[2] + ',' + rgba[3] + ')';
+        var backgroundColor = 'rgba(' + rgba[0] + ',' + rgba[1] + ',' + rgba[2] + ',' + rgba[3] + ')';
+
+        if (this.noBackground) {
+          backgroundColor = 'white';  
+        }
+
+        pixel.dataset.background = pixel.style.backgroundColor = backgroundColor;
         pixel.textContent = this._getClosestEmoji(rgba);
         return pixel;
       }
